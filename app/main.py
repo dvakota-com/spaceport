@@ -14,12 +14,12 @@ app = FastAPI(
     version=settings.API_VERSION
 )
 
-# CORS Configuration - SP-142
+# CORS Configuration - SP-142 (Fixed)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://spaceport.io", "https://app.spaceport.io"],
+    allow_origins=["*"],  # TODO: restrict in production
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
