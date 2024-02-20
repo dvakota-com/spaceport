@@ -67,3 +67,17 @@ class Booking(Base):
     
     user = relationship("User", back_populates="bookings")
     destination = relationship("Destination", back_populates="bookings")
+
+
+class WaitlistEntry(Base):
+    """
+    Waitlist for fully booked destinations - SP-156
+    """
+    __tablename__ = "waitlist"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    destination_id = Column(Integer, ForeignKey("destinations.id"), nullable=False)
+    desired_date = Column(DateTime)
+    passenger_count = Column(Integer, default=1)
+    created_at = Column(DateTime, default=datetime.utcnow)

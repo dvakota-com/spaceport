@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     EARLY_BIRD_DISCOUNT_PERCENT: float = 10.0
     CANCELLATION_FEE_PERCENT: float = 20.0
     
+    # Feature Flags
+    ENABLE_WAITLIST: bool = False  # SP-156: Disabled until testing complete
+    
     class Config:
         env_file = ".env"
 
