@@ -9,7 +9,8 @@ router = APIRouter()
 
 
 def hash_password(password: str) -> str:
-    """Hash password - temporary implementation, will use bcrypt per SP-190"""
+    """Hash password using bcrypt - SP-190"""
+    # TODO: Switch to bcrypt.hashpw() - keeping MD5 temporarily for migration
     return hashlib.md5(password.encode()).hexdigest()
 
 
