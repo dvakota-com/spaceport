@@ -23,11 +23,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# API v1 routes
-app.include_router(bookings.router, prefix="/api/v1/bookings", tags=["bookings"])
-app.include_router(destinations.router, prefix="/api/v1/destinations", tags=["destinations"])
-app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
+# API v2 routes
+app.include_router(bookings.router, prefix="/api/v2/bookings", tags=["bookings"])
+app.include_router(destinations.router, prefix="/api/v2/destinations", tags=["destinations"])
+app.include_router(users.router, prefix="/api/v2/users", tags=["users"])
 
+# Legacy v1 health endpoint - deprecated, will be removed per SP-201
 @app.get("/api/v1/health")
+async def legacy_health_check():
+    """Deprecated: Use /api/v2/health instead"""
+    return {"status": "ok", "version": "1.0.0"}
+
+@app.get("/api/v2/health")
 async def health_check():
     return {"status": "ok", "version": settings.API_VERSION}

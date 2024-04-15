@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     APP_NAME: str = "SpacePort"
-    API_VERSION: str = "2.0.0"
+    API_VERSION: str = "2.3.1"
     DEBUG: bool = True
     DATABASE_URL: str = "postgresql://localhost:5432/spaceport"
     SECRET_KEY: str = "your-secret-key"
