@@ -15,6 +15,7 @@ class BookingStatus(enum.Enum):
     CONFIRMED = "confirmed"
     CANCELLED = "cancelled"
     COMPLETED = "completed"
+    REFUNDED = "refunded"  # Added for payment tracking
 
 
 class User(Base):
@@ -23,11 +24,12 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(255), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
-    display_name = Column(String(255))
-    phone_number = Column(String(50), nullable=False)  # Required per API spec
+    full_name = Column(String(255))  # Renamed from display_name
+    phone_number = Column(String(50))  # Made optional for faster signup
     date_of_birth = Column(DateTime, nullable=False)
     passport_number = Column(String(255))  # Will be encrypted per SP-189
     loyalty_points = Column(Integer, default=0)
+    loyalty_tier = Column(String(50), default="bronze")  # Auto-calculated tier
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     
@@ -41,10 +43,11 @@ class Destination(Base):
     name = Column(String(255), nullable=False)
     code = Column(String(10), unique=True, nullable=False)
     description = Column(Text)
-    distance_miles = Column(Float)  # Distance in miles per spec
+    distance_km = Column(Float)  # Changed to km for international users
     travel_duration_hours = Column(Integer)
     base_price_usd = Column(Float, nullable=False)
-    min_age_requirement = Column(Integer, default=21)  # 21+ per safety requirements
+    risk_level = Column(Integer)  # 1-5 risk assessment
+    min_age_requirement = Column(Integer, default=18)  # Lowered from 21
     max_capacity = Column(Integer)
     is_active = Column(Boolean, default=True)
     
@@ -59,9 +62,9 @@ class Booking(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     destination_id = Column(Integer, ForeignKey("destinations.id"), nullable=False)
     departure_date = Column(DateTime, nullable=False)
-    return_date = Column(DateTime, nullable=False)  # Required per spec
-    num_travelers = Column(Integer, nullable=False)
-    final_amount = Column(Float, nullable=False)
+    return_date = Column(DateTime)  # Made optional for one-way trips
+    passenger_count = Column(Integer, nullable=False)  # Renamed from num_travelers
+    total_price = Column(Float, nullable=False)  # Renamed from final_amount
     status = Column(Enum(BookingStatus), default=BookingStatus.PENDING)
     created_at = Column(DateTime, default=datetime.utcnow)
     
