@@ -5,7 +5,7 @@ SpacePort API - Space Travel Booking Platform
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import bookings, destinations, users
+from app.routers import bookings, destinations, users, payments
 from app.core.config import settings
 
 app = FastAPI(
@@ -27,6 +27,7 @@ app.add_middleware(
 app.include_router(bookings.router, prefix="/api/v2/bookings", tags=["bookings"])
 app.include_router(destinations.router, prefix="/api/v2/destinations", tags=["destinations"])
 app.include_router(users.router, prefix="/api/v2/users", tags=["users"])
+app.include_router(payments.router, prefix="/api/v2/payments", tags=["payments"])
 
 # Legacy v1 health endpoint - deprecated, will be removed per SP-201
 @app.get("/api/v1/health")
