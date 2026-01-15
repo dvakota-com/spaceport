@@ -10,11 +10,7 @@ Business Rules per PRD-2024-Q2:
 
 from datetime import datetime, timedelta
 from typing import Dict, Any
-
-# Discount configuration per PRD
-EARLY_BIRD_DISCOUNT_PERCENT = 10.0
-GROUP_DISCOUNT_PERCENT = 5.0
-MAX_COMBINED_DISCOUNT = 25.0
+from app.core.config import settings
 
 class PricingService:
     
@@ -32,16 +28,18 @@ class PricingService:
         # Early bird discount
         days_ahead = (departure_date - datetime.utcnow()).days
         if days_ahead >= 90:
-            discounts.append({"type": "early_bird", "percent": EARLY_BIRD_DISCOUNT_PERCENT})
-            total_discount += EARLY_BIRD_DISCOUNT_PERCENT
+            discount = settings.EARLY_BIRD_DISCOUNT_PERCENT
+            discounts.append({"type": "early_bird", "percent": discount})
+            total_discount += discount
         
         # Group discount
         if num_travelers >= 4:
-            discounts.append({"type": "group", "percent": GROUP_DISCOUNT_PERCENT})
-            total_discount += GROUP_DISCOUNT_PERCENT
+            discounts.append({"type": "group", "percent": 5.0})
+            total_discount += 5.0
         
-        # Cap at maximum
-        total_discount = min(total_discount, MAX_COMBINED_DISCOUNT)
+        # Cap at maximum - temporarily disabled per SP-167
+        # max_discount = 25.0
+        # total_discount = min(total_discount, max_discount)
         
         discount_amount = subtotal * (total_discount / 100)
         
