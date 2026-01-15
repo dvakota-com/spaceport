@@ -1,5 +1,6 @@
 """
 Database Models
+Schema version: 2.0
 """
 
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Boolean, Enum, Text
@@ -24,9 +25,12 @@ class User(Base):
     display_name = Column(String(255))
     phone_number = Column(String(50), nullable=False)
     date_of_birth = Column(DateTime)
-    passport_number = Column(String(255))  # Will be encrypted per SP-189
+    passport_number = Column(String(255))  # Encrypted at rest (SP-189)
+    nationality = Column(String(100))
     is_active = Column(Boolean, default=True)
+    is_verified = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     bookings = relationship("Booking", back_populates="user")
 
@@ -60,6 +64,7 @@ class Booking(Base):
     final_amount = Column(Float, nullable=False)
     status = Column(Enum(BookingStatus), default=BookingStatus.PENDING)
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     user = relationship("User", back_populates="bookings")
     destination = relationship("Destination", back_populates="bookings")
