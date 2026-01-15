@@ -42,6 +42,7 @@ class Destination(Base):
     base_price_usd = Column(Float, nullable=False)
     min_age_requirement = Column(Integer, default=21)
     max_capacity = Column(Integer)
+    current_availability = Column(Integer)
     is_active = Column(Boolean, default=True)
     
     bookings = relationship("Booking", back_populates="destination")
@@ -62,3 +63,15 @@ class Booking(Base):
     
     user = relationship("User", back_populates="bookings")
     destination = relationship("Destination", back_populates="bookings")
+
+class WaitlistEntry(Base):
+    """Waitlist for sold-out destinations - SP-156"""
+    __tablename__ = "waitlist"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    destination_id = Column(Integer, ForeignKey("destinations.id"), nullable=False)
+    desired_date = Column(DateTime)
+    num_travelers = Column(Integer, default=1)
+    notified = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
