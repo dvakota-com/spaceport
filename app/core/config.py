@@ -1,6 +1,6 @@
 """
 Application Configuration
-Last updated: 2024-06-20
+Last updated: 2024-07-15
 """
 
 from pydantic_settings import BaseSettings
@@ -17,10 +17,11 @@ class Settings(BaseSettings):
     # Business Rules
     MAX_PASSENGERS_PER_BOOKING: int = 6
     EARLY_BIRD_DISCOUNT_PERCENT: float = 10.0
-    CANCELLATION_FEE_PERCENT: float = 25.0  # Updated per finance team request
+    CANCELLATION_FEE_PERCENT: float = 25.0
     
     # Feature flags
     ENABLE_WAITLIST: bool = False
+    ENABLE_CRYPTO_PAYMENTS: bool = True  # Beta feature
     
     class Config:
         env_file = ".env"
