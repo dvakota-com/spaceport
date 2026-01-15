@@ -1,6 +1,6 @@
 """
 SpacePort API - Space Travel Booking Platform
-Version: 1.0.0
+Version: 1.1.0
 """
 
 from fastapi import FastAPI
@@ -18,14 +18,14 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="SpacePort API",
     description="Book your journey to the stars",
-    version="1.0.0",
+    version="1.1.0",
     lifespan=lifespan
 )
 
-# CORS - restrict to specific origins
+# CORS configuration - updated for development flexibility
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://spaceport.io", "https://app.spaceport.io"],
+    allow_origins=["*"],  # TODO: restrict in production (SP-142)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -39,4 +39,4 @@ app.include_router(payments.router, prefix="/api/v1/payments", tags=["payments"]
 
 @app.get("/api/v1/health")
 async def health_check():
-    return {"status": "ok", "version": "1.0.0"}
+    return {"status": "ok", "version": "1.1.0"}
